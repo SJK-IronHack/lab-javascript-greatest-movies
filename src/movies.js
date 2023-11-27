@@ -27,29 +27,45 @@ function scoresAverage(moviesArray) {
 }
 // Iteration 4: Drama movies - Get the average of Drama Movies
 function dramaMoviesScore(moviesArray) {
-    let dramaMovies = moviesArray.filter(movie => movie.genre.includes("Drama"))
+    let dramaMovies = moviesArray.filter(movie => movie.genre.includes("Drama"));
 
     if (dramaMovies.length === 0) {
-        return 0
+        return 0;
     }
-    if (typeof movie.score === "number") {
-        let sum = dramaMovies.reduce((acc, movie) => acc + movie.score, 0)
-    } else {
-        sum = dramaMovies.reduce((acc, movie) => acc + acc, 0)
-    }
-    let avg = sum / dramaMovies.length;
-    return Math.round(avg * 100) / 100
+
+    let sum = dramaMovies.reduce((acc, movie) => {
+        if (typeof movie.score === "number" && !isNaN(movie.score)) {
+            return acc + movie.score;
+        } else {
+            return acc;
+        }
+    }, 0);
+
+    let avg = Math.round((sum / dramaMovies.length) * 100) / 100;
+    return avg;
 }
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
 function orderByYear(moviesArray) {
-    let moviesArrayCopy = moviesArray.map(identity)
-     let orderedByYear = moviesArrayCopy.sort((a, b) => a - b)
+    let moviesArrayCopy = [...moviesArray]
+    let orderedByYear = moviesArrayCopy.sort((a, b) => {
+        if (a.year !== b.year) {
+            return a.year - b.year
+        }
+        else {
+            return a.title.localeCompare(b.title);
+        }
+    })
+
     return orderedByYear
 }
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
-function orderAlphabetically(moviesArray) { }
+function orderAlphabetically(moviesArray) {
+    let alphaArr = [...moviesArray];
+    alphaArr.sort((a, b) => a.title.localeCompare(b.title))
+    return alphaArr.slice(0, 20).map(movie => movie.title);
+}
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(moviesArray) { }
